@@ -25,7 +25,7 @@ app.get('/webhook/', function(req, res) {
         return;
     }
     res.send('Error, wrong token')
-}); 
+});  
 
 app.post('/webhook/', function(req, res) {
   console.log(JSON.stringify(req.body));
