@@ -89,6 +89,9 @@ function storeMemeInfo(senderId, type, element){
     memeInfo[senderId].text2 = element;
     console.log('Text2 Stored for' + senderId);
     getMime(senderId);
+
+  } else if (type === 'text' && element ==='cancel') {
+      delete memeInfo[senderId];
   } else {
     console.log("Invalid input")
     sendMessageToUser(senderId, 'Invalid Input Please try Again');
