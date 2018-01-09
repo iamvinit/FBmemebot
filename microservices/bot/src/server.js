@@ -79,12 +79,12 @@ function storeMemeInfo(senderId, type, element){
     memeInfo[senderId].image_url = element;
     console.log('Image Stored for' + senderId);
     sendMessageToUser(senderId, 'Enter text 1');
-  } else if (senderId in memeInfo && type === 'text' && !(text1 in memeInfo[senderId])) {
+  } else if (senderId in memeInfo && type === 'text' && !('text1' in memeInfo[senderId])) {
     // store text 1
     memeInfo[senderId].text1 = element;
     console.log('Text1 Stored for' + senderId);
     sendMessageToUser(senderId, 'Enter text 2');
-  } else if (senderId in memeInfo && type === 'text' && !(text2 in memeInfo[senderId]) ) {
+  } else if (senderId in memeInfo && type === 'text' && !('text2' in memeInfo[senderId]) ) {
     // store text 2
     memeInfo[senderId].text2 = element;
     console.log('Text2 Stored for' + senderId);
