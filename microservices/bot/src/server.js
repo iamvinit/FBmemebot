@@ -44,12 +44,12 @@ app.post('/webhook/', function(req, res) {
                     messagingObject.message.attachments.forEach(function(attachmentsObject) {
                       if (attachmentsObject.type === 'image') {
                         var image_url = attachmentsObject.payload.url;
-                        storeMimeInfo(senderId, 'image_url', image_url); 
+                        storeMemeInfo(senderId, 'image_url', image_url); 
                       }                 
                     });
                   } else if(messagingObject.text) {
                   var text = messagingObject.message.text;
-                  storeMimeInfo(senderId, 'text', text);
+                  storeMemeInfo(senderId, 'text', text);
                   } else {
                     console.log('Invalid message');
                     sendMessageToUser(senderId,'Invalid response. Please try again');
@@ -72,7 +72,7 @@ app.post('/webhook/', function(req, res) {
   res.sendStatus(200);
 })
 
-function storeMimeInfo(senderId, type, element){
+function storeMemeInfo(senderId, type, element){
   if (!(senderId in memeInfo) && type === 'image_url'){   
     // store imageurl
     memeInfo[senderId] = new Object();
@@ -95,7 +95,7 @@ function storeMimeInfo(senderId, type, element){
   }
 }
 
-function sendUIMessageToUser(senderId, elementList) {
+function sendImageToUser(senderId, image_url) {
   request({
     url: FACEBOOK_SEND_MESSAGE_URL,
     method: 'POST',
@@ -105,19 +105,19 @@ function sendUIMessageToUser(senderId, elementList) {
       },
       message: {
         attachment: {
-          type: 'template',
+          type: 'image',
           payload: {
-            template_type: 'generic',
-            elements: elementList
+            url: image_url,
+            is_reusable: true
           }
         }
       }
     }
   }, function(error, response, body) {
         if (error) {
-          console.log('Error sending UI message to user: ' + error.toString());
+          console.log('Error sending Image to user: ' + error.toString());
         } else if (response.body.error){
-          console.log('Error sending UI message to user: ' + JSON.stringify(response.body.error));
+          console.log('Error sending Image to user: ' + JSON.stringify(response.body.error));
         }
   });
 }
@@ -209,6 +209,17 @@ function getMovieDetails(senderId, movieName) {
     }
   });
 }
+function getMime(senderId) {
+  showTypingIndicatorToUser(senderId, true);
+  var message = 'Found details on ' + movieName;
+  var image_url = memeInfo[senderId].image_url;
+  var text1 = memeInfo[senderId].text1;
+  var text2 = memeInfo[senderId].text2;
+  var outputUrl = 'https://memegen.link/custom/' + text1 + '/' + text2 + '.jpg?alt=' + image_url;
+  showTypingIndicatorToUser(senderId, false);
+  sendImageToUser(senderId, outputUrl);
+}
+
 
 
 app.listen(8080, function () {
