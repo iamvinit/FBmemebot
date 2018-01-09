@@ -77,24 +77,24 @@ function storeMemeInfo(senderId, type, element){
     // store imageurl
     memeInfo[senderId] = new Object();
     memeInfo[senderId].image_url = element;
-    console.log('Image Stored for' + senderId);
+    console.log('Image Stored for ' + senderId);
     sendMessageToUser(senderId, 'Enter text 1');
   } else if (senderId in memeInfo && type === 'text' && !('text1' in memeInfo[senderId])) {
     // store text 1
     memeInfo[senderId].text1 = element;
-    console.log('Text1 Stored for' + senderId);
+    console.log('Text1 Stored for ' + senderId);
     sendMessageToUser(senderId, 'Enter text 2');
   } else if (senderId in memeInfo && type === 'text' && !('text2' in memeInfo[senderId]) ) {
     // store text 2
     memeInfo[senderId].text2 = element;
-    console.log('Text2 Stored for' + senderId);
-    getMime(senderId);
+    console.log('Text2 Stored for ' + senderId);
+    getMeme(senderId);
 
-  } else if (type === 'text' && element ==='cancel') {
+  } else if (type === 'text' && element.trim().toLowerCase() ==='cancel') {
       delete memeInfo[senderId];
   } else {
     console.log("Invalid input")
-    sendMessageToUser(senderId, 'Invalid Input Please try Again');
+    sendMessageToUser(senderId, 'Invalid Input Please try Again or type cancel');
   }
 }
 
@@ -212,15 +212,15 @@ function getMovieDetails(senderId, movieName) {
     }
   });
 }
-function getMime(senderId) {
+function getMeme(senderId) {
   showTypingIndicatorToUser(senderId, true);
-  var message = 'Found details on ' + movieName;
   var image_url = memeInfo[senderId].image_url;
   var text1 = memeInfo[senderId].text1;
   var text2 = memeInfo[senderId].text2;
   var outputUrl = 'https://memegen.link/custom/' + text1 + '/' + text2 + '.jpg?alt=' + image_url;
   showTypingIndicatorToUser(senderId, false);
   sendImageToUser(senderId, outputUrl);
+  delete memeInfo[senderId];
 }
 
 
