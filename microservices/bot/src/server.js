@@ -47,7 +47,7 @@ app.post('/webhook/', function(req, res) {
                         storeMemeInfo(senderId, 'image_url', image_url); 
                       }                 
                     });
-                  } else if(messagingObject.text) {
+                  } else if(messagingObject.message.text) {
                   var text = messagingObject.message.text;
                   storeMemeInfo(senderId, 'text', text);
                   } else {
