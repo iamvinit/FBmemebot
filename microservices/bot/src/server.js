@@ -92,6 +92,7 @@ function storeMemeInfo(senderId, type, element){
 
   } else if (type === 'text' && element.trim().toLowerCase() ==='cancel') {
       delete memeInfo[senderId];
+      sendMessageToUser(senderId, 'Attach an image to create a meme');
   } else {
     console.log("Invalid input")
     sendMessageToUser(senderId, 'Invalid Input Please try Again or type cancel');
@@ -218,7 +219,7 @@ function getMeme(senderId) {
   var text1 = memeInfo[senderId].text1;
   var text2 = memeInfo[senderId].text2;
   var outputUrl = 'https://memegen.link/custom/' + text1 + '/' + text2 + '.jpg?alt=' + image_url;
-  console.output('output url'+outputUrl);
+  console.log('output url'+outputUrl);
   showTypingIndicatorToUser(senderId, false);
   sendImageToUser(senderId, outputUrl);
   delete memeInfo[senderId];
