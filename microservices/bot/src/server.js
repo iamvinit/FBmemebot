@@ -218,6 +218,7 @@ function getMeme(senderId) {
   var text1 = memeInfo[senderId].text1;
   var text2 = memeInfo[senderId].text2;
   var outputUrl = 'https://memegen.link/custom/' + text1 + '/' + text2 + '.jpg?alt=' + image_url;
+  console.output('output url'+outputUrl);
   showTypingIndicatorToUser(senderId, false);
   sendImageToUser(senderId, outputUrl);
   delete memeInfo[senderId];
