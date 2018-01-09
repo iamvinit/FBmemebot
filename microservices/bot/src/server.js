@@ -14,6 +14,8 @@ let FACEBOOK_SEND_MESSAGE_URL = 'https://graph.facebook.com/v2.6/me/messages?acc
 let MOVIE_DB_PLACEHOLDER_URL = 'http://image.tmdb.org/t/p/w185/';
 let MOVIE_DB_BASE_URL = 'https://www.themoviedb.org/movie/';
 
+var memeInfo = {}; // stores required informaion for a meme
+
 //your routes here
 app.get('/', function (req, res) {
     res.send("Hello World, I am a bot.")
@@ -37,9 +39,21 @@ app.post('/webhook/', function(req, res) {
               var senderId = messagingObject.sender.id;
               if (messagingObject.message) {
                 if (!messagingObject.message.is_echo) {
-                  //Assuming that everything sent to this bot is a movie name.
-                  var movieName = messagingObject.message.text;
-                  getMovieDetails(senderId, movieName);
+                  if (messagingObject.message.attachments) {
+                    // Conversation started. Store image
+                    messagingObject.message.attachments.forEach(function(attachmentsObject) {
+                      if (attachmentsObject.type === 'image') {
+                        var image_url = attachmentsObject.payload.url;
+                        storeMimeInfo(senderId, 'image_url', image_url); 
+                      }                 
+                    });
+                  } else if(messagingObject.text) {
+                  var text = messagingObject.message.text;
+                  storeMimeInfo(senderId, 'text', text);
+                  } else {
+                    console.log('Invalid message');
+                    sendMessageToUser(senderId,'Invalid response. Please try again');
+                  } 
                 }
               } else if (messagingObject.postback) {
                 console.log('Received Postback message from ' + senderId);
@@ -57,6 +71,29 @@ app.post('/webhook/', function(req, res) {
   }
   res.sendStatus(200);
 })
+
+function storeMimeInfo(senderId, type, element){
+  if (!(senderId in memeInfo) && type === 'image_url'){   
+    // store imageurl
+    memeInfo[senderId] = new Object();
+    memeInfo[senderId].image_url = element;
+    console.log('Image Stored for' + senderId);
+    sendMessageToUser(senderId, 'Enter text 1');
+  } else if (senderId in memeInfo && type === 'text' ) {
+    // store text 1
+    memeInfo[senderId].text1 = element;
+    console.log('Text1 Stored for' + senderId);
+    sendMessageToUser(senderId, 'Enter text 2');
+  } else if (senderId in memeInfo && type === 'text' && text1 in memeInfo[senderId] ) {
+    // store text 2
+    memeInfo[senderId].text2 = element;
+    console.log('Text2 Stored for' + senderId);
+    getMime(senderId);
+  } else {
+    console.log("Invalid input")
+    sendMessageToUser(senderId, 'Invalid Input Please try Again');
+  }
+}
 
 function sendUIMessageToUser(senderId, elementList) {
   request({
