@@ -20,15 +20,15 @@ For the chat bot to function we'll need a server that will receive the messages 
 * Navigate to https://developers.facebook.com/apps/
 * Click on **'+ Create a new app’**.
 
-![Fb app screen](https://raw.githubusercontent.com/jaisontj/hasura-fb-bot/master/assets/tutorial_fb_app_screen.png "fb app screen")
+![Fb app screen](https://raw.githubusercontent.com/iamvinit/FBmemebot/master/assets/tutorial_fb_app_screen.png "fb app screen")
 
 * Give a display name for your app and a contact email.
 
-![Fb app screen2](https://raw.githubusercontent.com/jaisontj/hasura-fb-bot/master/assets/tutorial_fb_app_screen2.png "fb app screen2")
+![Fb app screen2](https://raw.githubusercontent.com/iamvinit/FBmemebot/master/assets/tutorial_fb_app_screen2.png "fb app screen2")
 
 * In the select a product screen, hover over **Messenger** and click on **Set Up**
 
-![Fb app screen3](https://raw.githubusercontent.com/jaisontj/hasura-fb-bot/master/assets/tutorial_fb_app_screen3.png "fb app screen3")
+![Fb app screen3](https://raw.githubusercontent.com/iamvinit/FBmemebot/master/assets/tutorial_fb_app_screen3.png "fb app screen3")
 
 * To start using the bot, we need a facebook page to host our bot.
   + Scroll over to the **Token Generation** section
@@ -36,7 +36,7 @@ For the chat bot to function we'll need a server that will receive the messages 
   + Once you have selected a page, a *Page Access Token* will be generated for you.
   + Save this token somewhere.
 
-![Page token](https://raw.githubusercontent.com/jaisontj/hasura-fb-bot/master/assets/tutorial_fb_bot_page_token.png "Page token")
+![Page token](https://raw.githubusercontent.com/iamvinit/FBmemebot/master/assets/tutorial_fb_bot_page_token.png "Page token")
 
 * Now, we need to trigger the facebook app to start sending us messages
   - Switch back to the terminal
@@ -96,7 +96,7 @@ Find the EXTERNAL-URL for the service named `bot`(in this case -> https://bot.ap
 
 In your fb app page, scroll down until you find a card name `Webhooks`. Click on the `setup webhooks` button.
 
-![Enable webhooks2](https://raw.githubusercontent.com/jaisontj/hasura-fb-bot/master/assets/tutorial_fb_bot_enable_webhooks2.png "Enable webhooks2")
+![Enable webhooks2](https://raw.githubusercontent.com/iamvinit/FBmemebot/master/assets/tutorial_fb_bot_enable_webhooks2.png "Enable webhooks2")
 
 * The `callback URL` is the URL that the facebook servers will hit to verify as well as forward the messages sent to our bot. The nodejs app in this project uses the `/webhook` path as the `callback URL`. Making the `callback URL` https://bot.YOUR-CLUSTER-NAME.hasura-app.io/webhook (in this case -> https://bot.apology69.hasura-app.io/webhook/)
 * The `verify token`is the verify token that you set in your secrets above (in the command $ hasura secrets update bot.fb_verify_token.key <YOUR-VERIFY-TOKEN>)
