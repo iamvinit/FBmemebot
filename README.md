@@ -1,6 +1,6 @@
 # Facebook Messenger Bot that creates memes on Hasura
 **This is facebook messenger you will have:**
-![](https://giphy.com/gifs/3oFzm6GCcf0XF2LVwk)
+![](https://media.giphy.com/media/3oFzm6GCcf0XF2LVwk/giphy.gif)
 
 This tutorial consists of a simple facebook messenger bot which helps to creates meme from a given image. The user first sends an image to the bot followed by upper text and lower text to be embedded on the image. The bot replies back with the image of the meme.
 
