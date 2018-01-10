@@ -1,6 +1,7 @@
 description: A facebook messenger bot that creates memes deployed on Hasura.
 keywords: bot, facebook, nodejs, express, node, javascript, messenger, messenger bot,
   chatbot
+repoUrl: https://github.com/iamvinit/FBmemebot
 media: {}
-name: fb-bot
+name: fb-bot-meme-generator
 platformVersion: v0.15.3
