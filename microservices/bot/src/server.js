@@ -3,7 +3,6 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 
-let mdb = require('moviedb')(process.env.MOVIE_DB_TOKEN);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -11,8 +10,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 let FACEBOOK_VERIFY_TOKEN = process.env.FACEBOOK_VERIFY_TOKEN;
 let FACEBOOK_PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 let FACEBOOK_SEND_MESSAGE_URL = 'https://graph.facebook.com/v2.6/me/messages?access_token=' + FACEBOOK_PAGE_ACCESS_TOKEN;
-let MOVIE_DB_PLACEHOLDER_URL = 'http://image.tmdb.org/t/p/w185/';
-let MOVIE_DB_BASE_URL = 'https://www.themoviedb.org/movie/';
 
 var memeInfo = {}; // stores required informaion for a meme
 
@@ -72,30 +69,36 @@ app.post('/webhook/', function(req, res) {
   res.sendStatus(200);
 })
 
-function storeMemeInfo(senderId, type, element){
-  if (!(senderId in memeInfo) && type === 'image_url'){   
+function storeMemeInfo(senderId, type, element) {
+  if (type === 'text' && element.trim().toLowerCase() ==='.cancel') {
+      delete memeInfo[senderId];
+      sendMessageToUser(senderId, 'Attach an image to create a meme');
+  
+  } else if (!(senderId in memeInfo) && type === 'image_url') {   
     // store imageurl
     memeInfo[senderId] = new Object();
     memeInfo[senderId].image_url = element;
     console.log('Image Stored for ' + senderId);
-    sendMessageToUser(senderId, 'Enter text 1');
+    sendMessageToUser(senderId, 'Enter upper text to add to image');
+  
+  } else if (!(senderId in memeInfo) && type === 'text') {
+    console.log('Text send instead of image '+ senderId);
+    sendMessageToUser(senderId, 'Attach an image to create a meme');
+
   } else if (senderId in memeInfo && type === 'text' && !('text1' in memeInfo[senderId])) {
     // store text 1
     memeInfo[senderId].text1 = element;
     console.log('Text1 Stored for ' + senderId);
-    sendMessageToUser(senderId, 'Enter text 2');
+    sendMessageToUser(senderId, 'Enter lower text to add to image');
   } else if (senderId in memeInfo && type === 'text' && !('text2' in memeInfo[senderId]) ) {
     // store text 2
     memeInfo[senderId].text2 = element;
     console.log('Text2 Stored for ' + senderId);
     getMeme(senderId);
 
-  } else if (type === 'text' && element.trim().toLowerCase() ==='cancel') {
-      delete memeInfo[senderId];
-      sendMessageToUser(senderId, 'Attach an image to create a meme');
   } else {
     console.log("Invalid input")
-    sendMessageToUser(senderId, 'Invalid Input Please try Again or type cancel');
+    sendMessageToUser(senderId, 'Invalid Input Please try Again or type .cancel to start again');
   }
 }
 
@@ -167,53 +170,12 @@ function showTypingIndicatorToUser(senderId, isTyping) {
   });
 }
 
-function getElementObject(result) {
-  var movieName  = result.original_title
-  var overview = result.overview;
-  var posterPath = MOVIE_DB_PLACEHOLDER_URL + result.poster_path;
-  return {
-    title: movieName,
-    subtitle: overview,
-    image_url: posterPath,
-    buttons: [
-        {
-          type: "web_url",
-          url: MOVIE_DB_BASE_URL + result.id,
-          title: "View more details"
-        }
-    ]
-  }
-}
 
-function getMovieDetails(senderId, movieName) {
-  showTypingIndicatorToUser(senderId, true);
-  var message = 'Found details on ' + movieName;
-  mdb.searchMovie({ query: movieName }, (err, res) => {
-    showTypingIndicatorToUser(senderId, false);
-    if (err) {
-      console.log('Error using movieDB: ' + err);
-      sendMessageToUser(senderId, 'Error finding details on ' + movieName);
-    } else {
-      console.log(res);
-      if (res.results) {
-        if (res.results.length > 0) {
-          var elements = []
-          var resultCount =  res.results.length > 5 ? 5 : res.results.length;
-          for (i = 0; i < resultCount; i++) {
-            var result = res.results[i];
-            elements.push(getElementObject(result));
-          }
-          sendUIMessageToUser(senderId, elements);
-        } else {
-          sendMessageToUser(senderId, 'Could not find any informationg on ' + movieName);
-        }
-      } else {
-        sendMessageToUser(senderId, message);
-      }
-    }
-  });
-}
+
 function encodeMemeText(val) {
+  if(val === ""){
+    val = " ";
+  }
   val = val.toLowerCase();
   val = val.replace(/-/g, '--');
   val = val.replace(/_/g, '__');
@@ -225,8 +187,10 @@ function encodeMemeText(val) {
   val = val.replace(/\"/g, '\'\'');
   return val;
 }
+
 function getMeme(senderId) {
   showTypingIndicatorToUser(senderId, true);
+  sendMessageToUser(senderId, 'Here is your created meme');
   var image_url = memeInfo[senderId].image_url;
   //replace all '&' in image_url with %26
   image_url = image_url.replace(/&/g,'%26'); 
@@ -243,5 +207,4 @@ function getMeme(senderId) {
 
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!');
-  console.log(encodeMemeText('? '))
 });
