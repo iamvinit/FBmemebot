@@ -216,6 +216,8 @@ function getMovieDetails(senderId, movieName) {
 function getMeme(senderId) {
   showTypingIndicatorToUser(senderId, true);
   var image_url = memeInfo[senderId].image_url;
+  //replace all '&' in image_url with %26
+  image_url = image_url.replace(/&/g,%26); 
   var text1 = memeInfo[senderId].text1;
   var text2 = memeInfo[senderId].text2;
   var outputUrl = 'https://memegen.link/custom/' + text1 + '/' + text2 + '.jpg?alt=' + image_url;
