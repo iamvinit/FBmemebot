@@ -1,5 +1,5 @@
 # Facebook Messenger Bot that creates memes on Hasura
-**This is facebook messenger you will have:**
+**This is the facebook messenger bot you will have:**
 
 ![](https://media.giphy.com/media/3oFzm6GCcf0XF2LVwk/giphy.gif)
 
