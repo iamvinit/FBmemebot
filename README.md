@@ -108,7 +108,7 @@ Next, open up your facebook page.
 * Hover over the **Send Message** button and click on Test Button.
 
 
-![Test button](https://raw.githubusercontent.com/jaisontj/hasura-fb-bot/master/assets/tutorial_fb_bot_page_add_button.png "Add button")
+![Test button](https://raw.githubusercontent.com/iamvinit/FBmemebot/master/assets/tutorial_fb_bot_page_add_button.png "Add button")
 * Send a message to your bot.
 
 Test out your bot, on receiving an image it should ask for upper text and lower text and respond with the image of the meme.
