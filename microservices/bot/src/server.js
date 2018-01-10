@@ -213,13 +213,25 @@ function getMovieDetails(senderId, movieName) {
     }
   });
 }
+function encodeMemeText(val) {
+  val = val.toLowerCase();
+  val = val.replace(/-/g, '--');
+  val = val.replace(/_/g, '__');
+  val = val.replace(/\s+/g, '_');
+  val = val.replace(/\?/g, '~q');
+  val = val.replace(/%/g, '~p');
+  val = val.replace(/#/g, '~h');
+  val = val.replace(/\//g, '~s');
+  val = val.replace(/\"/g, '\'\'');
+  return val;
+}
 function getMeme(senderId) {
   showTypingIndicatorToUser(senderId, true);
   var image_url = memeInfo[senderId].image_url;
   //replace all '&' in image_url with %26
   image_url = image_url.replace(/&/g,'%26'); 
-  var text1 = memeInfo[senderId].text1;
-  var text2 = memeInfo[senderId].text2;
+  var text1 = encodeMemeText( memeInfo[senderId].text1);
+  var text2 = encodeMemeText( memeInfo[senderId].text2);
   var outputUrl = 'https://memegen.link/custom/' + text1 + '/' + text2 + '.jpg?alt=' + image_url;
   console.log('output url'+outputUrl);
   showTypingIndicatorToUser(senderId, false);
@@ -231,4 +243,5 @@ function getMeme(senderId) {
 
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!');
+  console.log(encodeMemeText('? '))
 });
