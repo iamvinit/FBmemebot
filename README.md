@@ -1,6 +1,8 @@
-# Building a Facebook Messenger Bot on Hasura
+# Facebook Messenger Bot that creates memes on Hasura
+**This is facebook messenger you will have:**
+![](https://giphy.com/gifs/3oFzm6GCcf0XF2LVwk)
 
-This tutorial consists of a simple facebook messenger bot which, when given a movie name replies back with details about the movie along with a poster image as well as a `More Details` button. Clicking this button redirects the user to a page with more details on the movie.
+This tutorial consists of a simple facebook messenger bot which helps to creates meme from a given image. The user first sends an image to the bot followed by upper text and lower text to be embedded on the image. The bot replies back with the image of the meme.
 
 For the chat bot to function we'll need a server that will receive the messages sent by the Facebook users, process this message and respond back to the user. To send messages back to the server we will use the graph API provided by Facebook. For the Facebook servers to talk to our server, the endpoint URL of our server should be accessible to the Facebook server and should use a secure HTTPS URL. For this reason, running our server locally will not work and instead we need to host our server online. In this tutorial, we are going to deploy our server on Hasura which automatically provides SSL-enabled domains.
 
@@ -44,8 +46,6 @@ For the chat bot to function we'll need a server that will receive the messages 
 $ curl -X POST "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=<PAGE_ACCESS_TOKEN>"
 ```
 
-* In this project, we are using https://www.themoviedb.org/ to get information about the movie, to access their APIs you need an API key(v3). You can find instructions to get one [here](https://developers.themoviedb.org/3/getting-started).
-
 ### Getting the Hasura project
 
 ```sh
@@ -55,8 +55,6 @@ $ cd fb-bot
 $ hasura secrets update bot.fb_verify_token.key <YOUR-VERIFY-TOKEN>
 # Add FACEBOOK_PAGE_ACCESS_TOKEN to secrets
 $ hasura secrets update bot.fb_page_token.key <YOUR-FB-PAGE-ACCESS-TOKEN>
-# Add Movie db api token to secrets
-$ hasura secrets update bot.movie_db_token.key <YOUR-MOVIEDB-API-TOKEN>
 # Deploy
 $ git add . && git commit -m "Deployment commit"
 $ git push hasura master
@@ -108,16 +106,12 @@ Next, open up your facebook page.
 
 * Hover over the **Send Message** button and click on Test Button.
 
-* Instead, if your button says **+ Add Button**, click on it.
 
-![Add button](https://raw.githubusercontent.com/jaisontj/hasura-fb-bot/master/assets/tutorial_fb_bot_page_add_button.png "Add button")
-
-* Next, click on **Use our messenger bot**. Then, **Get Started** and finally **Add Button**.
-* You will now see that the **+ Add button** has now changed to **Get Started**. Hovering over this will show you a list with an item named **Test this button**. Click on it to start chatting with your bot.
+![Test button](https://raw.githubusercontent.com/jaisontj/hasura-fb-bot/master/assets/tutorial_fb_bot_page_add_button.png "Add button")
 * Send a message to your bot.
 
-Test out your bot, on receiving a movie name it should respond with details about that movie.
+Test out your bot, on receiving an image it should ask for upper text and lower text and respond with the image of the meme.
 
 ## Support
 
-If you happen to get stuck anywhere, feel free to raise an issue [here](https://github.com/jaisontj/hasura-fb-bot)
+If you happen to get stuck anywhere, feel free to raise an issue [here](https://github.com/iamvinit/FBmemebot)

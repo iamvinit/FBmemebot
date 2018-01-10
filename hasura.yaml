@@ -1,4 +1,4 @@
-description: A facebook messenger bot deployed on Hasura.
+description: A facebook messenger bot that creates memes deployed on Hasura.
 keywords: bot, facebook, nodejs, express, node, javascript, messenger, messenger bot,
   chatbot
 media: {}
